@@ -50,7 +50,7 @@ A UHF resource MUST NOT have in any object two or more specified keys for which 
 
 ### body
 
-The value of the `body` key, if present, is out of the scope of this specification. UHF parsers SHOULD NOT assume anything about the interior structure of `body`.
+The value of the `body` CURIE key, if present, is out of the scope of this specification. UHF parsers SHOULD NOT assume anything about the interior structure of `body`.
 
 ### head
 
@@ -66,7 +66,9 @@ An object in the `head` array MAY have other keys specified by references in the
 
 ### rel
 
-The value of the `rel` CURIE key is a JSON array of zero or more strings. Each such string MUST be one of:
+The value of the `rel` CURIE key is a JSON array of zero or more strings, called the "`rel` array".
+
+Each string in the `rel` array MUST be one of:
 
 - a [well-known link relation](https://www.iana.org/assignments/link-relations/link-relations.xhtml)
 - an [IRI](https://www.ietf.org/rfc/rfc3987.txt)
