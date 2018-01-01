@@ -74,8 +74,8 @@ The value of the `rel` CURIE key is a JSON array of zero or more strings, called
 
 Each string in the `rel` array MUST be one of:
 
-- a [well-known link relation](https://www.iana.org/assignments/link-relations/link-relations.xhtml)
-- an [IRI](https://www.ietf.org/rfc/rfc3987.txt)
+- a [registered link relation](https://www.iana.org/assignments/link-relations/link-relations.xhtml)
+- an [IRI](https://tools.ietf.org/html/rfc3987)
 - a [SafeCURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/#P_safe_curie) with a prefix known to the parser
 
 ### title
@@ -113,3 +113,5 @@ The value of the `uri` CURIE key, if present, is a string.  This string MUST be 
 ###### Examples
 
 ...
+
+
