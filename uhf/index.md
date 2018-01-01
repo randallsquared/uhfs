@@ -1,4 +1,4 @@
-# UHF Hypermedia Format
+# UHF Hypermedia Format: Default
 
 UHF is a JSON hypermedia format.  UHF's media type is `application/vnd.uhf+json`.
 
@@ -8,7 +8,7 @@ Specified keys are JSON object keys which are defined by this document or extens
 
 ## CURIEs definition object
 
-UHF uses [CURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/)s to namespace all specified keys, allowing extensions by adding new CURIE definitions to a JSON object such that the CURIE prefix is the key, and the reference is the value.  This JSON object is the "CURIEs definition object".
+UHF uses [CURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/)s to namespace all specified keys, allowing extensions by adding new CURIE definitions to a JSON object such that the CURIE prefix is the key, and the mapped IRI is the value.  The mapped (partial) IRI is called the "expansion".  This JSON object is called the "CURIEs definition object".
 
 ###### Example
 
@@ -16,9 +16,11 @@ UHF uses [CURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/)s to namespace 
 { "default": "http://uhfs.org/uhf", "bar": "http://example.org/foo/bar" }
 ```
 
-The `default` key MUST be present in the CURIEs defintion object, and MUST have a string value starting with `http://uhfs.org/uhf`, and optionally continuing with a forward slash ('/') and an integer representing a change revision number.  This specification is currently unversioned, and the intent is to satisfy future changes via extensions rather than changes to this core document, but if such changes are necessary and if they have effects which UHF parser implementations must take into account, the `default` key MAY reference any revision of this specification which exists at the time of UHF document creation.
+A default key MUST be present in the CURIEs definition object, and MUST have a string value starting with `http://uhfs.org/uhf`, and optionally continuing with a forward slash ('/') and an integer representing a change revision number.  This specification is currently unversioned, and the intent is to satisfy future changes via extensions rather than changes to this core document, but if such changes are necessary and if they have effects which UHF parser implementations must take into account, the default prefix MAY reference any revision of this specification which exists at the time of UHF document creation.
 
-Given the default CURIE prefix, the following CURIEs are equivalent as UHF keys:
+If two or more expansions have `http://uhfs.org/uhf`
+
+Given the default CURIE prefix as `default`, the following CURIEs are equivalent as UHF keys:
 
 - `"uhf"`
 - `":uhf"`
@@ -29,6 +31,9 @@ Given the default CURIE prefix, the following CURIEs are equivalent as UHF keys:
 
 While the final three forms are allowed in conformance with [CURIE syntax](https://www.w3.org/TR/2010/NOTE-curie-20101216/#s_syntax), the SafeCURIE forms are superfluous in UHF-defined keys, because no IRIs are allowed as UHF-defined keys.  Nevertheless, conforming UHF parsers MUST correctly handle SafeCURIEs, even in UHF-defined keys.
 
+## Extensions
+
+Let's talk about what extensions need to define...
 
 ## Structure
 
@@ -45,8 +50,7 @@ A UHF resource MUST NOT have any key in the root context which incorporates a pr
 A UHF resource MUST NOT have in any object two or more specified keys for which CURIE processing produces a duplicate IRI.
 
 
-## Base keys
-
+## Keys
 
 ### body
 
@@ -62,7 +66,7 @@ An object in the `head` array MAY have a key which is a CURIE with the default p
 
 An object in the `head` array MAY have a key which is a CURIE with the default prefix and a reference of "uri". Its value is a string.
 
-An object in the `head` array MAY have other keys specified by references in the CURIEs definition object.
+An object in the `head` array MAY have other keys specified by expansions in the CURIEs definition object.
 
 ### rel
 
@@ -82,11 +86,11 @@ Implementations SHOULD provide this string as a label, title, or context for wha
 
 ### uhf
 
-The `uhf` CURIE key MUST have as its value an object, called the "CURIEs definition object".  The CURIEs definition object is a mapping from CURIE prefixes to CURIE references. The CURIEs definition object contains no processable CURIEs.  Implementations MUST NOT process either keys or values of the CURIEs definition object as CURIEs themselves (no recursion).
+The `uhf` CURIE key MUST have as its value an object, called the "CURIEs definition object".  The CURIEs definition object is a mapping from CURIE prefixes to IRI expansions. The CURIEs definition object contains no processable CURIEs.  Implementations MUST NOT process either keys or values of the CURIEs definition object as CURIEs themselves (no recursion).
 
 Keys of the CURIEs definition object MUST conform to the requirement for [CURIE prefixes](https://www.w3.org/TR/2010/NOTE-curie-20101216/#s_syntax).
 
-Values of the CURIEs definition object MUST conform to the requirement for [CURIE references](https://www.w3.org/TR/2010/NOTE-curie-20101216/#s_syntax).
+Values of the CURIEs definition object MUST conform to the requirement for [IRI](https://tools.ietf.org/html/rfc3987#section-2.2)s.
 
 #### Scope
 
