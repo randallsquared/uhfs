@@ -16,9 +16,7 @@ UHF uses [CURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/)s to namespace 
 { "default": "http://uhfs.org/uhf", "bar": "http://example.org/foo/bar" }
 ```
 
-A default key MUST be present in the CURIEs definition object, and MUST have a string value starting with `http://uhfs.org/uhf`, and optionally continuing with a forward slash ('/') and an integer representing a change revision number.  This specification is currently unversioned, and the intent is to satisfy future changes via extensions rather than changes to this core document, but if such changes are necessary and if they have effects which UHF parser implementations must take into account, the default prefix MAY reference any revision of this specification which exists at the time of UHF document creation.
-
-If two or more expansions have `http://uhfs.org/uhf`
+A default prefix MUST be present in the CURIEs definition object, and MUST have a string value starting with `http://uhfs.org/uhf`, and optionally continuing with a forward slash ('/') and a sequence of numeric digits representing a change revision number.  If more than one expansion matches, the default prefix is defined by the expansion with the highest change revision number, treating `http://uhfs.org/uhf` as `http://uhfs.org/uhf/0`.  This specification is currently unversioned, and the intent is to satisfy future changes via extensions rather than changes to this core document, but if such changes are necessary and if they have effects which UHF parser implementations must take into account, the default prefix MAY reference any revision of this specification which exists at the time of UHF document creation.
 
 Given the default CURIE prefix as `default`, the following CURIEs are equivalent as UHF keys:
 
