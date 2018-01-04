@@ -1,6 +1,5 @@
-# UHF
 
-This is a draft.   It was last updated Jan 1, 2018.
+This is a draft.   It was last updated Jan 3, 2018.
 
 This site is the home of the UHF Hypermedia Format (UHF).
 
