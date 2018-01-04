@@ -32,28 +32,27 @@ Some last details about CURIEs: they can have surrounding square brackets (calle
 In
 
 ```json
-{ "uhf": { "a": "http:\/\/uhfs.org/uhf" } }
+{ "uhf": { "a": "http://uhfs.org/uhf" } }
 ```
 
 which is a useless document, but also the smallest valid UHF document, the default prefix is `a`.   The six core keys mentioned above use the default prefix, which means that the bare `uhf` key is fine, but it could also be written
 
 ```json
-{ "a:uhf": { "a": "http:\/\/uhfs.org/uhf" } }
+{ "a:uhf": { "a": "http://uhfs.org/uhf" } }
 ```
 or
 
 ```json
-{ "[a:uhf]": { "a": "http:\/\/uhfs.org/uhf" } }
+{ "[a:uhf]": { "a": "http://uhfs.org/uhf" } }
 ```
 
 or even
 
 ```json
-{ ":uhf": { "a": "http:\/\/uhfs.org/uhf" } }
+{ ":uhf": { "a": "http://uhfs.org/uhf" } }
 ```
 
-There are, in fact, six ways to write a valid key based on the default prefix `a` and a reference of `uhf`:
-
+There are, in fact, six ways to write a valid key based on the default prefix `a` with a reference of `uhf`:
 
 - `"uhf"`
 - `"[uhf]"`
@@ -62,16 +61,71 @@ There are, in fact, six ways to write a valid key based on the default prefix `a
 - `"a:uhf"`
 - `"[a:uhf]"`
 
-Only the default key has this issue; for all other prefixes, there are only two ways of writing the key, `<prefix>:<reference>` and `[<prefix>:<reference>]`.  Since those are really the same UHF key, they should never both appear in the same object; if they do, it's not valid UHF.
+Only the default prefix has this many; for all other prefixes, there are only two ways of writing the key, `<prefix>:<reference>` and `[<prefix>:<reference>]`.  Since those are really the same UHF key, they should never both appear in the same object; if they do, it's not valid UHF.
 
 ## Back to keys
 
-So, the `body` can be anything at all.   This is the UHF-approved place to put all your data, exactly as you'd format it for your own use, without any weird keys or required structures mixed in.  If there's no `body`, that doesn't necessarily mean there's no content, but it does mean that all the content is metadata, rather than data of a resource.
+So, the `body` can be anything at all.   This is the UHF-approved place to put all your data, exactly as you'd format it for your own use, without any weird keys or required structures mixed in.  If there's no `body`, that doesn't necessarily mean there's no content, but it does mean that all the content is metadata, rather than resource data.
 
-The `uhf` key is where prefixes are defined, and where you can memoize all those repetitive URLs you would otherwise want to use in your first, next, previous, last, etc, links.
+The `uhf` object is where prefixes are defined, and where you can memoize all those repetitive URLs you would otherwise want to use in your first, previous, next, last, etc, links.
 
-The `head` key is where all other metadata is placed.
+The `head` array is where all other metadata is placed.
 
-> A side note: what is data and what is metadata is a matter of opinion, basically, so it shouldn't surprise you that some information you might consider data could end up in `head`.  For example, the resource extension allows placing an entire request result inside a container in the `head`, which means there could be a `body` key under that container, but whatever is in that `body` key is **still** not UHF's business...
+> **IMPORTANT**: no order should be implied by the order of items in the `head`.  All the detail about each entry in this list is contained within the object itself.
+
+An example:
+
+```json
+{
+  "uhf": {
+    "u": "http://uhfs.org/uhf",
+    "wh": "/warehouse/",
+    "local": "/rels/",
+    "ord": "/orders/"
+  },
+  "head": [
+    { "rel": ["self", "[local:order]"], "uri": "[ord:523]" },
+    { "rel": ["next", "[local:order]"], "uri": "[ord:524]" },
+    { "rel": ["prev", "[local:order]"], "uri": "[ord:522]" },
+    { "rel": ["warehouse"], "uri": "[wh:13]" , "title": "Warehouse 13" },
+    { "rel": ["warehouse"], "uri": "[wh:58]" },
+    { "rel": ["warehouse"], "uri": "[wh:143]" },
+    { "rel": ["invoice"], "uri": "/invoices/873" }
+  ],
+  "body": {
+    "currency": "USD",
+    "status": "shipped",
+    "total": 10.20
+  }
+}
+```
+
+From the top, we can see:
+
+- we have a `uhf` object, which is mandatory for UHF documents
+
+    ...well, it could be called, in this document, any of:
+    - `"uhf"`
+    - `"[uhf]"`
+    - `":uhf"`
+    - `"[:uhf]"`
+    - `"u:uhf"` (because the `u` prefix is the default, as mentioned below)
+    - `"[u:uhf]"`
+- we have four CURIEs defined
+- the mandatory default CURIE is defined with `u` (because it has the value of the URI to the UHF base specification).
+
+    This just means that we could only use the `u`-prefixed form of keys for "u:uhf", "u:head", "u:body", "u:rel", "u:uri", or "u:title".  Because UHF allows the document writer to choose the actual default prefix, it can always be something that doesn't conflict with any prefix the writer would prefer to use for their own URIs.  Also, we expect that mostly the document writer will just leave off the prefix and colon when writing UHF base keys, as they did in this example
+- the `head` array of links and other affordances, *in which order is of no significance*
+- the first entry in `head` happens to be a link with the "self" relation, meaning it is a link to this very document
+- the other relation of that first entry is a SafeCURIE, expanding through the `local` prefix to "/rels/order", which is hopefully a dereferenceable URI based on the host we got this document from, telling us how to understand the `body` data.  Note that we couldn't use "local:order" without brackets, here, because it's not possible to tell mechanically if that's a URI or a CURIE, and so the `rel` array is defined as allowing only SafeCURIEs, IRIs (URIs), and registered link relations
+- the `uri` of that first entry similarly uses the SafeCURIE format to avoid repeating "/orders/", questionable though that decision might be in this particular case
+- the link with a `uri` of `"[wh:13]"` also has a new key, `title`, which is the last of the six defined by basic UHF.  It's intended to be a user-readable label for the link, much as one would use in the interior of an `A` tag in HTML.
+- the value of `body` happens to be an object with three keys, but UHF specifies nothing about the value of `body`, so this could be any valid JSON value, and the document would still be valid UHF.  Describing how to process the `body` should be handled at some URI found as a companion link relation to "self", and this document does have such a link, so visiting that would be our next step in understanding this UHF.
+
+
+
+
+
+
 
 
