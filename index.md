@@ -3,18 +3,20 @@ This is a draft.   It was last updated Jan 3, 2018.
 
 This site is the home of the UHF Hypermedia Format (UHF).
 
-UHF is a deliberately simple format, introducing to JSON
+UHF is a deliberately simple format.  It consists of five JSON keys (with various spellings) and usage rules that permit some extensions. Together, these fully cover only the most basic hypermedia use case: linking. The only H Factor supported is [[LO]](http://amundsen.com/hypermedia/hfactor/#LO).
 
 1. three keys dividing a UHF document into three sections:
     - uhf
     - head
     - body
-1. three keys that can only appear under `head`:
+1. two keys that can only appear under `head`:
+    - rel
+    - uri
 1. an extension / namespacing mechanism for additional capabilities
 
 A UHF document can have a root-level key called `body`, and anything can go in here.   Your non-hypermedia API output, for example.
 
-A UHF document can have a root-level key called `head`, which names an array of links that can each have a URI, a set of rels, and a title.
+A UHF document can have a root-level key called `head`, which names an array of links that can each have a URI, and must have a set of rels.
 
 Every UHF document has a root-level key called `uhf`.  This is the core of the format.  The JSON object that `uhf` names is a mapping from "prefix" keys to partial URIs.
 
@@ -26,7 +28,7 @@ Every key that has meaning in UHF has a CURIE prefix and a CURIE reference. Allo
 
 The CURIE definition object at `uhf` may well have CURIEs defined that are not UHF, and not intended to define keys, since some values can also be CURIEs in some form.  This may seem ambiguous at first, but remember that the document producer does not need to discover what CURIEs they are using, and the document consumer only needs to match prefix URIs against local capabilities for keys they actually find: no one is ever in a position of having to distinguish UHF format CURIEs from other CURIEs.
 
-Some last details about CURIEs: they can have surrounding square brackets (called SafeCURIEs, since you can use them in a place that might have a URI), and the prefix part is optional.  If the prefix part is missing, the colon is optional.  A missing prefix is considered to use the "default" prefix.  A format can define a default prefix, or a mechanism for determining that default prefix. UHF takes this option: the default prefix is the one that has a value of `http://uhfs.org/uhf`, right now.  There are some other details about versioning, but they won't matter until the specification is official and there's been a change to it.
+Some last details about CURIEs: they can have surrounding square brackets (called SafeCURIEs, since you can use them in a place that might have a URI), and the prefix part is optional.  If the prefix part is missing, the colon is optional.  A missing prefix is considered to use the "default" prefix.  A format can define a default prefix, or a mechanism for determining that default prefix. UHF takes this option: the default prefix is the one that has a value of `http://uhfs.org/uhf`, right now.  There are some other details about versioning, but they won't matter until the specification is complete and there's been a change to it.
 
 In
 
@@ -86,7 +88,7 @@ An example:
     { "rel": ["self", "[local:order]"], "uri": "[ord:523]" },
     { "rel": ["next", "[local:order]"], "uri": "[ord:524]" },
     { "rel": ["prev", "[local:order]"], "uri": "[ord:522]" },
-    { "rel": ["warehouse"], "uri": "[wh:13]" , "title": "Warehouse 13" },
+    { "rel": ["warehouse"], "uri": "[wh:13]" },
     { "rel": ["warehouse"], "uri": "[wh:58]" },
     { "rel": ["warehouse"], "uri": "[wh:143]" },
     { "rel": ["invoice"], "uri": "/invoices/873" }
@@ -103,28 +105,22 @@ From the top, we can see:
 
 - we have a `uhf` object, which is mandatory for UHF documents
 
-    ...well, it could be called, in this document, any of:
-    - `"uhf"`
-    - `"[uhf]"`
-    - `":uhf"`
-    - `"[:uhf]"`
-    - `"u:uhf"` (because the `u` prefix is the default, as mentioned below)
-    - `"[u:uhf]"`
+    ...well, it could be called, in this document, something like `"[:uhf]"` or `"u:uhf"`, as described above.
 - we have four CURIEs defined
 - the mandatory default CURIE is defined with `u` (because it has the value of the URI to the UHF base specification).
 
-    This just means that we could only use the `u`-prefixed form of keys for "u:uhf", "u:head", "u:body", "u:rel", "u:uri", or "u:title".  Because UHF allows the document writer to choose the actual default prefix, it can always be something that doesn't conflict with any prefix the writer would prefer to use for their own URIs.  Also, we expect that mostly the document writer will just leave off the prefix and colon when writing UHF base keys, as they did in this example
+    This just means that we could only use the `u`-prefixed form of keys for "u:uhf", "u:head", "u:body", "u:rel", or "u:uri".  Because UHF allows the document writer to choose the actual default prefix, it can always be something that doesn't conflict with any prefix the writer would prefer to use for their own URIs.  Also, we expect that mostly the document writer will just leave off the prefix and colon when writing UHF base keys, as they did in this example
 - the `head` array of links and other affordances, *in which order is of no significance*
 - the first entry in `head` happens to be a link with the "self" relation, meaning it is a link to this very document
 - the other relation of that first entry is a SafeCURIE, expanding through the `local` prefix to "/rels/order", which is hopefully a dereferenceable URI based on the host we got this document from, telling us how to understand the `body` data.  Note that we couldn't use "local:order" without brackets, here, because it's not possible to tell mechanically if that's a URI or a CURIE, and so the `rel` array is defined as allowing only SafeCURIEs, IRIs (URIs), and registered link relations
 - the `uri` of that first entry similarly uses the SafeCURIE format to avoid repeating "/orders/", questionable though that decision might be in this particular case
-- the link with a `uri` of `"[wh:13]"` also has a new key, `title`, which is the last of the six defined by basic UHF.  It's intended to be a user-readable label for the link, much as one would use in the interior of an `A` tag in HTML.
 - the value of `body` happens to be an object with three keys, but UHF specifies nothing about the value of `body`, so this could be any valid JSON value, and the document would still be valid UHF.  Describing how to process the `body` should be handled at some URI found as a companion link relation to "self", and this document does have such a link, so visiting that would be our next step in understanding this UHF.
 
 
+## Questions
 
+1. Q: Why is a URI optional?
 
-
-
-
-
+    Answers:
+    1. A missing URI could be considered to be the empty relative URI, meaning this document.
+    1. Some extensions, including at least one that UHF launches with, [template](/ext/template), define other keys that fill the role of having a link.

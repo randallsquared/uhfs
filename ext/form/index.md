@@ -9,7 +9,7 @@ The keys described herein are:
 - `form`
 - - `pattern`
 - - `option`
-- - title
+- - label
 - - gen:name
 - - gen:value
 - - gen:content-type

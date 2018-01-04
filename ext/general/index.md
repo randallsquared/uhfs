@@ -8,5 +8,6 @@ The keys described herein are:
 
 - `name`
 - `value`
+- `label`
 - `content-type`
 
