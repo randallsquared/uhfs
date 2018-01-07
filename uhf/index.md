@@ -4,9 +4,11 @@ UHF is a JSON hypermedia format.  UHF's media type is `application/vnd.uhf+json`
 
 ## Definitions
 
+This section is informative.
+
 The terms `value`, `array`, `number`, `object`, `true`, `false`, and `null` are used as in [[RFC7159]](https://tools.ietf.org/html/rfc7159#section-2).
 
-The term `name` refers to a [CURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/). If the default prefix is set in the uhf context as "u", then all of the following possible JSON names would be written in this document as `example`.
+The term `name` refers to a [CURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/) used as a JSON name. If the default prefix is set in the uhf context as "u", then all of the following possible JSON names would be written in this document as `example`.
 
 - `"example"`
 - `":example"`
@@ -19,49 +21,9 @@ UHF parsers MUST treat these as the same UHF name.  UHF parsers MAY process all 
 
 The term `context` refers to an object which has name/value pairs specified by UHF or a UHF extension.
 
-## Names
-
-### body
-
-If present, the value of `body` is out of the scope of this specification. UHF extensions SHOULD NOT specify anything about its interior structure.  The value of the `body` name is not a UHF context even if it is an object.
-
-The name `body` MUST NOT appear in any UHF context except a root context.
-
-### head
-
-The value of `head` is an array of zero or more objects.  Each such object is a head context.
-
-The name `head` MUST NOT appear in any UHF context except a root context.
-
-### rel
-
-The value of `rel` is an array of zero or more strings.
-
-Each such string MUST be one of:
-
-- a [registered link relation](https://www.iana.org/assignments/link-relations/link-relations.xhtml)
-- an [IRI](https://tools.ietf.org/html/rfc3987)
-- a [SafeCURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/#P_safe_curie) with a prefix known to the parser
-
-The `rel` name MAY appear in a head context, or anywhere under `head` if allowed by an extension.
-
-### uhf
-
-The value of `uhf` is the uhf context.
-
-The name `uhf` MUST NOT appear in any UHF context except a root context.
-
-### uri
-
-If present, the name `uri` MUST have a string value.  This string MUST be one of:
-
-- an [IRI](https://www.ietf.org/rfc/rfc3987.txt)
-- a [SafeCURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/#P_safe_curie) with a prefix known to the parser
-
-The `uri` name MAY appear in a head context, or anywhere under `head` if allowed by an extension.
-
-
 ## Contexts
+
+This section is normative.
 
 This specification defines three contexts.
 
@@ -100,36 +62,95 @@ Objects in the head array MUST NOT have any name with the default prefix other t
 
 Objects in the head array MAY have one or more names which are CURIEs with other prefixes named in the uhf context.
 
-Objects in the head MUST NOT have any other names.
+Objects in the head array MUST NOT have any other names.
+
+## Names
+
+This section is normative.
+
+### body
+
+If present, the value of `body` is out of the scope of this specification. UHF extensions SHOULD NOT specify anything about its interior structure.  The value of the `body` name is not a UHF context even if it is an object.
+
+The name `body` MUST NOT appear in any UHF context except a root context.
+
+### head
+
+If present, the value of `head` is an array of zero or more objects.  Each such object is a head context.
+
+The name `head` MUST NOT appear in any UHF context except a root context.
+
+### rel
+
+The value of `rel` is an array of zero or more strings.
+
+Each such string MUST be one of:
+
+- a [registered link relation](https://www.iana.org/assignments/link-relations/link-relations.xhtml)
+- an [IRI](https://tools.ietf.org/html/rfc3987)
+- a [SafeCURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/#P_safe_curie) with a prefix known to the parser
+
+The `rel` name MAY appear in a head context, or anywhere under `head` if allowed by an extension.
+
+### uhf
+
+The value of `uhf` is the uhf context.
+
+The name `uhf` MUST NOT appear in any UHF context except a root context.
+
+### uri
+
+If present, the name `uri` MUST have a string value.  This string MUST be one of:
+
+- an [IRI](https://www.ietf.org/rfc/rfc3987.txt)
+- a [SafeCURIE](https://www.w3.org/TR/2010/NOTE-curie-20101216/#P_safe_curie) with a prefix known to the parser
+
+The `uri` name MAY appear in a head context, or anywhere under `head` if allowed by an extension.
 
 ## Extensions
 
-A document defining an extension to UHF MUST have at least the following sections:
+This section is informative.
+
+A document defining an extension to UHF will provide at least three sections:
 
 ### Definitions
 
-This section should define any terms in the extension specification which might otherwise be ambiguous.
+This extension section will define any terms in the extension specification which might otherwise be ambiguous.
 
 ### Names
 
-This section should list any name/value pairs described by this extension.
+This extension section will list any name/value pairs described by this extension.
 
-The extension MUST provide the JSON type or types which may appear as the value of a name.
+The extension will provide the JSON type or types which may appear as the value of a name, and might provide other restrictions concerning a value which are not expressible as JSON type information.
 
-The extension MAY provide other restrictions concerning a value which are not expressible as JSON type information.
+The extension will provide guidance on the usage of a name in context, and might provide guidance or restrictions on the usage of a name in other extensions.
 
-The extension SHOULD provide guidance on the usage of a name in context.
-
-The extension MAY provide guidance or restrictions on the usage of a name in other extensions.
-
-The extension SHOULD provide information about the semantic meaning and/or intended use of a name.
+The extension will provide information about the semantic meaning and/or intended use of a name.
 
 ### Contexts
 
-This section should list any UHF contexts described by this extension.
+This extension section will list any UHF contexts described by this extension.
 
-A name which has (or may have) an object as its value MAY describe a context for other UHF keys.
+A name which has (or may have) an object as its value might describe a context for other UHF names.
 
-The extension MUST provide information about what names may or may not appear in a context.
+The extension will provide information about what names may or may not appear in a context, and about the semantic meaning and/or intended use of a context.
 
-The extension SHOULD provide information about the semantic meaning and/or intended use of a context.
+### Known extensions
+
+At publication time, these are the known UHF extensions:
+
+- [general](http://uhfs.org/ext/general)
+- http
+- form
+- path
+- pointer
+- template
+- resource
+
+## Changes
+
+This section is informative.
+
+Changes to this specification, after initial publication, increment a revision integer. The first such change will be `1`, the second `2`, and so on. These will be made available at the URI created by appending a slash and the revision integer to the base specification URI. The first such change will therefore be available at `http://uhfs.org/uhf/1`, and when this change becomes available, that URI will be a legitimate default prefix for the uhf context. This will be noted in the uhf context description for each revision.
+
+Extensions might use this same versioning scheme.
