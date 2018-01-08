@@ -10,6 +10,7 @@ The names described herein are:
 - `contentType`
 - `label`
 - `name`
+- `required`
 - `value`
 
 ## Definitions
@@ -28,7 +29,9 @@ If present, the value of `content-type` MUST be an array of zero or more strings
 
 Clients MUST NOT infer semantic meaning from the order of items in this array.
 
-Extensions which define contexts MAY restrict allowed array items in contexts they define.
+The name `content-type` MAY appear in the head context from the base UHF specification.
+
+Extensions which define other contexts allowing `content-type` MAY restrict allowed array items in contexts they define.
 
 ### contentType
 
@@ -40,7 +43,9 @@ If present, the value of `label` MUST be a string.
 
 There are no restrictions on the content of the string.   UHF clients SHOULD present `label` as a title or label referring to the surrounding context.
 
-Extensions which define contexts MAY restrict the allowed values of `label` in contexts they define.
+The name `label` MAY appear in the head context from the base UHF specification.
+
+Extensions which define other contexts allowing `label` MAY restrict the allowed values of `label` in contexts they define.
 
 ### name
 
@@ -48,7 +53,9 @@ If present, the value of `name` MUST be a string.
 
 There are no restrictions on the content of the string.
 
-Extensions which define contexts MAY restrict the allowed values of `name` in contexts they define.
+The name `name` MAY appear in the head context from the base UHF specification.
+
+Extensions which define other contexts allowing `name` MAY restrict the allowed values of `name` in contexts they define.
 
 ### value
 
@@ -58,4 +65,6 @@ If an array, a `value` array MUST contain zero or more of string, number, true, 
 
 Clients MUST NOT infer semantic meaning from the order of items in a `value` array.
 
-Extensions which define contexts MAY restrict allowed values for `value` in contexts they define.
+The name `value` MAY appear in the head context from the base UHF specification.
+
+Extensions which define other contexts allowing `value` MAY restrict allowed values for `value` in contexts they define.

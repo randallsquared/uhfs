@@ -54,15 +54,17 @@ For other name/value pairs appearing in this context:
 
 ### head
 
-Objects in the head array MUST have a name `rel` with the default prefix.
+The head context represents any object which appears in the `head` array.
 
-Objects in the head array MAY have a name `uri` with the default prefix.
+A head context object MUST have a name `rel` with the default prefix.
 
-Objects in the head array MUST NOT have any name with the default prefix other than `rel` AND `uri`.
+A head context object MAY have a name `uri` with the default prefix.
 
-Objects in the head array MAY have one or more names which are CURIEs with other prefixes named in the uhf context.
+A head context object MUST NOT have any name with the default prefix other than `rel` AND `uri`.
 
-Objects in the head array MUST NOT have any other names.
+A head context object MAY have one or more names which are CURIEs with other prefixes named in the uhf context.
+
+A head context object MUST NOT have any other names.
 
 ## Names
 
@@ -140,7 +142,7 @@ The extension will provide information about what names may or may not appear in
 At publication time, these are the known UHF extensions:
 
 - [general](http://uhfs.org/ext/general)
-- http
+- [http](http://uhfs.org/ext/http)
 - form
 - path
 - pointer
