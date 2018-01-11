@@ -30,7 +30,7 @@ A header context object MUST have a name, `g:name`, with a value matching the na
 
 A header context object MAY have a name, `g:value`, with a value matching the header value to send when sending the header.
 
-A header context object MAY have one or more names which are CURIEs with other prefixes named in the uhf context from the base UHF specification, but this extension describes no additional semantics or requirements for any such names.
+A header context object MAY have one or more names with other defined prefixes, but this extension describes no additional semantics or requirements for any such names.
 
 ### http
 
@@ -38,7 +38,7 @@ The http context represents HTTP-specific information about requests to the URI 
 
 The http context MAY have any or all of the names `header`, `method`, or `required`, as they are defined in this extension.
 
-The http context MAY have one or more names which are CURIEs with other prefixes named in the uhf context from the base UHF specification, but this extension describes no additional semantics or requirements for any such names.
+The http context MAY have one or more names with other defined prefixes, but this extension describes no additional semantics or requirements for any such names.
 
 ## Names
 

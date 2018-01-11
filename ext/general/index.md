@@ -41,7 +41,7 @@ The name `contentType` is an alternate spelling for the name `content-type`.
 
 If present, the value of `label` MUST be a string.
 
-There are no restrictions on the content of the string.   UHF clients SHOULD present `label` as a title or label referring to the surrounding context.
+There are no restrictions on the content of the string.   UHF clients SHOULD present the value of `label` as a title or label referring to the surrounding context.
 
 The name `label` MAY appear in the head context from the base UHF specification.
 

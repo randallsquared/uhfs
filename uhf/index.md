@@ -19,6 +19,8 @@ The term `name` refers to a [CURIE](https://www.w3.org/TR/2010/NOTE-curie-201012
 
 UHF parsers MUST treat these as the same UHF name.  UHF parsers MAY process all names to derive canonical IRIs or CURIEs.  UHF contexts MUST NOT have names which represent the same IRI.  It is not allowed to have both `:body` and `[body]` in the same context, though either of those is itself an allowed spelling of the `body` name.
 
+This document will use `JSON name` to include all names that might appear in an object whether they are CURIEs or not.
+
 The term `context` refers to an object which has name/value pairs specified by UHF or a UHF extension.
 
 ## Contexts
@@ -26,6 +28,20 @@ The term `context` refers to an object which has name/value pairs specified by U
 This section is normative.
 
 This specification defines three contexts.
+
+### head
+
+The head context represents any object which appears in the `head` array.
+
+A head context object MUST have a name `rel` with the default prefix.
+
+A head context object MAY have a name `uri` with the default prefix.
+
+A head context object MUST NOT have any name with the default prefix other than `rel` AND `uri`.
+
+A head context object MAY have one or more names with other defined prefixes.
+
+A head context object MUST NOT have any other JSON names.
 
 ### root
 
@@ -37,7 +53,7 @@ The root context MAY have a name `head` with the default prefix.
 
 The root context MUST have a name `uhf` with the default prefix.
 
-The root context MUST NOT have any other name.
+The root context MUST NOT have any other JSON names.
 
 If an extension provides a context which is a UHF root context (an embedded UHF resource), the extension MUST specify whether prefixes named in child resources override prefixes named in parent resources which include such a context.
 
@@ -51,20 +67,6 @@ For other name/value pairs appearing in this context:
 
 - Each name MUST be a [CURIE prefix](https://www.w3.org/TR/2010/NOTE-curie-20101216/#s_syntax).
 - Each value MUST be an [IRI](https://tools.ietf.org/html/rfc3987), and MUST NOT be a CURIE or SafeCURIE.
-
-### head
-
-The head context represents any object which appears in the `head` array.
-
-A head context object MUST have a name `rel` with the default prefix.
-
-A head context object MAY have a name `uri` with the default prefix.
-
-A head context object MUST NOT have any name with the default prefix other than `rel` AND `uri`.
-
-A head context object MAY have one or more names which are CURIEs with other prefixes named in the uhf context.
-
-A head context object MUST NOT have any other names.
 
 ## Names
 
@@ -86,7 +88,9 @@ The name `head` MUST NOT appear in any UHF context except a root context.
 
 The value of `rel` is an array of zero or more strings.
 
-Each such string MUST be one of:
+Clients MUST NOT infer semantic meaning from the order of items in this array.
+
+Each string value MUST be one of:
 
 - a [registered link relation](https://www.iana.org/assignments/link-relations/link-relations.xhtml)
 - an [IRI](https://tools.ietf.org/html/rfc3987)
@@ -144,10 +148,18 @@ At publication time, these are the known UHF extensions:
 - [general](http://uhfs.org/ext/general)
 - [http](http://uhfs.org/ext/http)
 - form
-- path
 - pointer
 - template
 - resource
+
+### Potential extensions
+
+Some others potentially useful extensions:
+
+- json path ([JSONPath](http://goessner.net/articles/JsonPath/))
+- jsonata ([JSONata](http://jsonata.org))
+- jwalk ([JWalk discussed here](https://www.tbray.org/ongoing/When/201x/2014/05/05/Fat-JSON))
+
 
 ## Changes
 
