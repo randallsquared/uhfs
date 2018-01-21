@@ -8,4 +8,3 @@ The keys described herein are:
 
 - `template`
 - `form`
-
