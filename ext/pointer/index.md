@@ -34,4 +34,3 @@ The IRI (after expansion if a SafeCURIE) MUST represent a JSON document with a U
 The name `ref` MAY appear in the head context from the base UHF specification.  In the head context, parsers MAY treat the base `rel` as relating the head context's link to the value or values pointed at by `ref`, rather than necessarily the entire UHF document.
 
 Extensions which define other contexts allowing `ref` MAY restrict allowed array items in contexts they define.
-

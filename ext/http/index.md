@@ -26,9 +26,13 @@ Terms in this document are used as in [[UHF]](http://uhfs.org/uhf).
 
 A header context object represents a single header to be sent with the HTTP request described by the context in which `header` appears.
 
-A header context object MUST have a name, `g:name`, with a value matching the name of some HTTP header.
+A header context object MUST have a name, `g:name`, with a string value matching the name of some HTTP header.
 
-A header context object MAY have a name, `g:value`, with a value matching the header value to send when sending the header.
+A header context object MAY have a name, `g:value`, with a string value matching the header value to send when sending the header.
+
+A header context object MAY have a name, `inherit`, with a boolean value.  If this value is `true`, conforming clients SHOULD take as the value of this header the equivalent header in the request producing this document.  If this value is `false`, conforming clients SHOULD NOT use the producing request's equivalent header.
+
+Given a header context containing both `g:value` with some string value and `inherit` with a value of `true`, conforming clients SHOULD take the `g:value` value as the header value if unable to take the equivalent header in the request producing this document.
 
 A header context object MAY have one or more names with other defined prefixes, but this extension describes no additional semantics or requirements for any such names.
 
@@ -57,6 +61,12 @@ The value of `http` is the http context.
 The name `http` MAY appear in the head context from the base UHF specification.
 
 Extensions which define other contexts allowing `http` MAY restrict the value of `http` in contexts they define.
+
+### inherit
+
+If present, the value of `inherit` MUST be either `true` or `false`.
+
+The name `inherit` MUST NOT appear in any context defined in the base UHF specification.  It MAY appear in the header context.
 
 ### method
 

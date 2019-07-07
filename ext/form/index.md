@@ -12,7 +12,7 @@ The keys described herein are:
 - `form`
 - - `pattern`
 - - `option`
-- - label
+- - gen:label
 - - gen:name
 - - gen:value
 - - gen:content-type
